@@ -8,41 +8,37 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 
 /**
- * User model
+ * This is the model class for table "User".
  *
- * @property integer $id
- * @property string $username
- * @property string $password_hash
- * @property string $password_reset_token
- * @property string $email
- * @property string $auth_key
- * @property integer $status
+ * @property integer $user_id
+ * @property string $user_names
+ * @property string $user_lastname
+ * @property string $user_snd_lastname
+ * @property string $user_curp
+ * @property string $user_email
+ * @property string $user_telephone
+ * @property string $user_address
+ * @property string $user_profile_photo
  * @property integer $created_at
  * @property integer $updated_at
- * @property string $password write-only password
+ * @property string $password_hash
+ * @property string $auth_key
+ * @property string $password_reset_token
+ * @property integer $status
+ *
+ * @property Lending[] $lendings
+ * @property Copy[] $copies
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
-
-
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%user}}';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function behaviors()
-    {
-        return [
-            TimestampBehavior::className(),
-        ];
+        return 'User';
     }
 
     /**
@@ -51,17 +47,65 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            [['user_names', 'user_lastname', 'user_snd_lastname', 'user_curp', 'user_email', 'user_telephone', 'user_address'], 'required'],
+            [['created_at', 'updated_at', 'status'], 'integer'],
+            [['user_names', 'user_address'], 'string', 'max' => 100],
+            [['user_lastname', 'user_snd_lastname'], 'string', 'max' => 45],
+            [['user_curp'], 'string', 'max' => 18],
+            [['user_email'], 'string', 'max' => 70],
+            [['user_telephone'], 'string', 'max' => 15],
+            [['user_profile_photo'], 'string', 'max' => 200],
+            [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
+            [['auth_key'], 'string', 'max' => 32],
         ];
     }
 
     /**
      * @inheritdoc
      */
+    public function attributeLabels()
+    {
+        return [
+            'user_id' => 'User ID',
+            'user_names' => 'User Names',
+            'user_lastname' => 'User Lastname',
+            'user_snd_lastname' => 'User Snd Lastname',
+            'user_curp' => 'User Curp',
+            'user_email' => 'User Email',
+            'user_telephone' => 'User Telephone',
+            'user_address' => 'User Address',
+            'user_profile_photo' => 'User Profile Photo',
+            'created_at' => 'Created At',
+            'updated_at' => 'Updated At',
+            'password_hash' => 'Password Hash',
+            'auth_key' => 'Auth Key',
+            'password_reset_token' => 'Password Reset Token',
+            'status' => 'Status',
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getLendings()
+    {
+        return $this->hasMany(Lending::className(), ['user_id' => 'user_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCopies()
+    {
+        return $this->hasMany(Copy::className(), ['copy_id' => 'copy_id'])->viaTable('Lending', ['user_id' => 'user_id']);
+    }
+
+     /**
+     * @inheritdoc
+     */
     public static function findIdentity($id)
     {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['user_id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -80,7 +124,12 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::findOne(['user_names' => $username, 'status' => self::STATUS_ACTIVE]);
+    }
+
+    public static function findByEmail($email)
+    {
+        return static::findOne(['user_email' => $email, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
