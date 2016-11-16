@@ -21,6 +21,7 @@ use Yii;
  */
 class Book extends \yii\db\ActiveRecord
 {
+    public $categories;
     /**
      * @inheritdoc
      */
