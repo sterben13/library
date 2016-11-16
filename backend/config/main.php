@@ -13,17 +13,24 @@ return [
     'bootstrap' => ['log'],
     'modules' => [],
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'dmstr\web\AdminLteAsset' => [
+                    'skin' => 'skin-yellow',
+                ],
+            ],
+        ],
         'request' => [
-            'csrfParam' => '_csrf-backend',
+            'csrfParam' => '_csrf-backend-library',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-backend-library', 'httpOnly' => true],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the backend
-            'name' => 'advanced-backend',
+            'name' => 'backend-library',
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
