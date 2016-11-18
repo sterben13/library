@@ -66,7 +66,9 @@ class LendingController extends Controller
     {
         $model = new Lending();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->lend_return_real=date("Y-m-d");
+            $model->save();
             return $this->redirect(['view', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id]);
         } else {
             return $this->render('create', [

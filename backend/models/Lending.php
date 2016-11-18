@@ -46,8 +46,8 @@ class Lending extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => 'User ID',
-            'copy_id' => 'Copy ID',
+            'user_id' => 'Id Usuario',
+            'copy_id' => 'Id Copia',
             'lend_auth_at' => 'Lend Auth At',
             'lend_return_at' => 'Lend Return At',
             'lend_return_real' => 'Lend Return Real',
