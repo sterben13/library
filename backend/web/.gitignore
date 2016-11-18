@@ -1,2 +1,5 @@
 /index.php
 /index-test.php
+/img/covers/*
+
+!/img/covers/generic-book-cover.jpg
