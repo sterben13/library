@@ -37,14 +37,14 @@ use backend\models\Category;
     </script>
     <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-3 ">
         <figure>
-         <!-- <img id="preview-img" class="img-responsive" src="<?= Url::to('@web/img/covers/generic-book-cover.jpg') ?>" alt="Portada de libro"> -->
+         
         <?= 
-            Html::img($model->isNewRecord ? Url::to('@web/img/covers/generic-book-cover.jpg') :  $model->book_cover,
+            Html::img($model->isNewRecord ? Url::to('web/img/covers/generic-book-cover.jpg') :  $model->book_cover,
                 [
                     'id' => 'preview-img',
                     'class' => 'img-responsive',
                     'alt' => 'Portada de libro'
-                ])
+                ]);
         ?>
         </figure>
         <!-- <label class="btn btn-default btn-lg btn-block">UPLOAD -->
