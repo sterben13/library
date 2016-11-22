@@ -4,8 +4,8 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Book;
-use backend\models\Category;
 use backend\models\BookForm;
+use backend\models\Category;
 use backend\models\BookSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -65,11 +65,9 @@ class BookController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Book();
-
-
+        $model = new BookForm();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->book_id]);
+            return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -89,7 +87,10 @@ class BookController extends Controller
         $model = $this->findModel($id);
 
 
-        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+        if ($model->load(Yii::$app->request->post()) && $model->update(true, [
+                'book_isbn', 'book_title', 'book_author', 'book_abstract',
+                'book_cover', 'book_editorial'
+            ])) {
             return $this->redirect(['view', 'id' => $model->book_id]);
         } else {
             $model->categories = $model->getCatNames()->all();

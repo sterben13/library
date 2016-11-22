@@ -1,0 +1,12 @@
+input[type=file] {
+	
+	color:transparent;
+}
+
+.img-container {
+	padding: 30px;
+}
+
+figure {
+	padding-bottom: 15px;
+}
