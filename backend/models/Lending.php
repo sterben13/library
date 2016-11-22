@@ -33,7 +33,8 @@ class Lending extends \yii\db\ActiveRecord
     {
         return [
             [['user_id', 'copy_id', 'lend_auth_at', 'lend_return_at'], 'required'],
-            [['user_id', 'copy_id'], 'integer'],
+            [['user_id'], 'integer'],
+            [['copy_id'], 'string'],
             [['lend_auth_at', 'lend_return_at', 'lend_return_real'], 'safe'],
             [['copy_id'], 'exist', 'skipOnError' => true, 'targetClass' => Copy::className(), 'targetAttribute' => ['copy_id' => 'copy_id']],
             [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'user_id']],

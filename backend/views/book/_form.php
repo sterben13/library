@@ -38,13 +38,13 @@ use backend\models\Category;
     <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-3 ">
         <figure>
          
-        <?= 
-            Html::img($model->isNewRecord ? Url::to('web/img/covers/generic-book-cover.jpg') :  $model->book_cover,
+        <?php 
+            /*Html::img($model->isNewRecord ? Url::to('web/img/covers/generic-book-cover.jpg') :  $model->book_cover,
                 [
                     'id' => 'preview-img',
                     'class' => 'img-responsive',
                     'alt' => 'Portada de libro'
-                ]);
+                ]);*/
         ?>
         </figure>
         <!-- <label class="btn btn-default btn-lg btn-block">UPLOAD -->

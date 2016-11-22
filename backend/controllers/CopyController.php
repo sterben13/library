@@ -8,6 +8,7 @@ use backend\models\CopySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\Book;
 
 /**
  * CopyController implements the CRUD actions for Copy model.
@@ -65,7 +66,10 @@ class CopyController extends Controller
     {
         $model = new Copy();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $libro = Book::find()->where(['book_id' => $model->book_id])->one();           
+            $model->copy_id = substr($libro->book_isbn.uniqid(),0,15);
+            $model->save(false);
             return $this->redirect(['view', 'id' => $model->copy_id]);
         } else {
             return $this->render('create', [
