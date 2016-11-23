@@ -35,7 +35,8 @@ class Copy extends \yii\db\ActiveRecord
     {
         return [
             [['copy_id', 'book_id', 'copy_edition'], 'required'],
-            [['copy_id', 'book_id', 'copy_available'], 'integer'],
+            [['book_id', 'copy_available'], 'integer'],
+            ['copy_id', 'string'],
             [['copy_edition', 'copy_language', 'copy_state'], 'string'],
             [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_id' => 'book_id']],
         ];

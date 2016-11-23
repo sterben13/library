@@ -6,6 +6,7 @@ use Yii;
 use yii\helpers\Url;
 use yii\web\IdentityInterface;
 use yii\web\UploadedFile;
+use common\models\FileHelper;
 
 /**
  * This is the model class for table "User".
@@ -50,11 +51,12 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['user_names', 'user_lastname', 'user_snd_lastname', 'user_curp', 'user_email', 'user_telephone', 'user_address'], 'required'],
+            [['user_names', 'user_lastname', 'user_snd_lastname', 'user_curp', 'user_email', 'user_telephone', 'user_address', 'password_hash'], 'required'],
             [['created_at', 'updated_at', 'status'], 'integer'],
             [['user_names', 'user_address'], 'string', 'max' => 100],
             [['user_lastname', 'user_snd_lastname'], 'string', 'max' => 45],
             [['user_curp'], 'string', 'max' => 18],
+            [['user_curp', 'user_email'],'unique'],
             [['user_email'], 'string', 'max' => 70],
             [['user_telephone'], 'string', 'max' => 15],
             [['user_profile_photo'], 'string', 'max' => 200],
@@ -91,7 +93,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'password_hash' => 'Contraseña',
             'auth_key' => 'Auth Key',
             'password_reset_token' => 'Password Reset Token',
-            'status' => 'Status',
+            'status' => 'Estado',
             'image' => 'Fotografía'
         ];
     }
@@ -103,47 +105,27 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
      */
      public function save($runValidation = true, $attributeNames = NULL)
     {
-
-        if($this->storeCover() && parent::save($runValidation, $attributeNames)){
-            Yii::info('Book data stored');
-           
-            return true;
+        if(!$this->validate()){
+            return false;
         }
-        
-        return false;
+
+        $file = UploadedFile::getInstance($this, 'image');
+        $fileName = $this->user_curp;
+        $fileHelper = new FileHelper('img/photos/');
+        $this->user_profile_photo = $fileHelper->upload($file, $fileName, 'user-default.png');
+
+        $this->created_at = date('U');
+        $this->status = self::STATUS_ACTIVE;
+        if($this->isNewRecord)
+            $this->setPassword($this->password_hash);
+
+
+        return parent::save($runValidation, $attributeNames);
     }
 
-    /**
-     *
-     *Override method
-     */
-     public function update($runValidation = true, $attributeNames = NULL)
-    {
-        
-        
-        $this->storeCover();
-        if(parent::update($runValidation, $attributeNames)){
-          
-          
-            return true;
-        }
-        return false;
-    }
 
-    private function storeCover(){
-        
-        $this->image = UploadedFile::getInstance($this, 'image');
-        
-        if($this->image){
-            $image = $this->image->baseName . '.' . $this->image->extension;
-            if($this->image->saveAs('img/photos/' . $image, false)){
-                $this->user_profile_photo = Url::to('@web/img/photos/' . $image);
-                return true;
-            }
-        }
-        
-       return false;
-    }
+
+
 
     /**
      * @return \yii\db\ActiveQuery
