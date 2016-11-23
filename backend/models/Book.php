@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\helpers\Url;
 use yii\web\UploadedFile;
+use common\models\FileHelper;
 
 /**
  * This is the model class for table "Book".
@@ -23,16 +24,28 @@ use yii\web\UploadedFile;
  */
 class Book extends \yii\db\ActiveRecord
 {
-    public $coverImg;
+
+    const SCENARIO_INSERT = "INSERT";
+    const SCENARIO_UPDATE = "UPDATE";
+
     public $categories;
+    public $coverFile;
 
     private $rules = [
-            [['book_isbn', 'book_title'], 'required'],
+            [['book_isbn', 'book_title', 'categories'], 'required'],
             [['book_isbn'], 'string', 'max' => 13],
             [['book_title', 'book_author'], 'string', 'max' => 100],
-            [[ 'book_editorial'], 'string', 'max' => 45],
+            [['book_editorial'], 'string', 'max' => 45],
             [['book_abstract'], 'string', 'max' => 500],
             [['book_cover'], 'string', 'max' => 200],
+            ['book_isbn', 'string', 'max' => 13],
+            ['book_isbn', 'unique', 
+                'message' => 'Ya existe un libro con este ISBN.',
+                'except' => self::SCENARIO_UPDATE
+            ],
+            ['book_isbn', 'validateIsbn', 'except' => self::SCENARIO_INSERT],
+            [['coverFile'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg'],
+           
         ];
 
     /**
@@ -63,49 +76,73 @@ class Book extends \yii\db\ActiveRecord
             'book_author' => 'Autor',
             'book_abstract' => 'Resumen',
             'book_editorial' => 'Editorial',
+            'coverFile' => 'Portada',
+            'categories' => 'Categorías'
         ];
     }
 
-  
-    /**
-     *
-     *Override method
-     */
-     public function update($runValidation = true, $attributeNames = NULL)
+    public function validateIsbn($attribute, $params) 
     {
-        
-        Yii::info('Cover url: ' . $this->book_cover);
-        $this->storeCover();
-        if(parent::save($runValidation, $attributeNames)){
-            Yii::info('Book data updated');
-            BookHasCategory::deleteAll(['book_id' => $this->book_id]);
-            foreach ($this->categories as $category) {
-                $rel = new BookHasCategory();
-                $rel->book_id  = $this->book_id;
-                $rel->cat_name = $category;
-                if($rel->save()){
-                   Yii::info('Category ' . $rel->cat_name . ' linked to book ' . $rel->book_id);
-                }
-            }
-            return true;
+        Yii::info('Validating ISBN on update for book : ' . $this->book_id);
+        $book = Book::findOne($this->book_id);
+        if($book && !Book::findOne(['book_isbn' => $this->book_isbn])){
+            Yii::info('Valid ISBN');
+            return  true;
         }
+        Yii::info('Invalid ISBN');
         return false;
     }
 
-    private function storeCover(){
+
+
+    public function save($runValidation = true, $attributeNames = NULL)
+    {
+        if(!$this->validate()){
+            Yii::info('Errors validating ' . print_r($this->getErrors()));
+            return false;
+        }
+
+        //Saving the book cover
+        $file = UploadedFile::getInstance($this, 'coverFile');
+        $fileName = $this->book_isbn;
+        $fileHelper = new FileHelper('img/covers/');
+        $this->book_cover = $fileHelper->upload($file, $fileName);
+
+        $transaction = Book::getDb()->beginTransaction();
+        if(parent::save()){
         
-        $this->coverImg = UploadedFile::getInstance($this, 'coverImg');
+            $flag = true;
         
-        if($this->coverImg){
-            $coverName = $this->coverImg->baseName . '.' . $this->coverImg->extension;
-            if($this->coverImg->saveAs('img/covers/' . $coverName, false)){
-                Yii::info('Cover stored');
-                $this->book_cover = Url::to('@web/img/covers/' . $coverName);
+            Yii::info('The Book was saved successfully: ' . $this->book_id);
+            //Deleting all the relationships between Book and Category if any
+            BookHasCategory::deleteAll(['book_id'=> $this->book_id]);
+            //Saving the new relationships
+            foreach ($this->categories as $category) {
+                Yii::info('Category asigned to this document: ' . $category);
+                $join = new BookHasCategory();
+                $join->cat_name = $category;
+                $join->book_id  = $this->book_id;
+                $flag = $join->save() && $flag;
+            }
+                //TODO: WE NEED TO FIND THE WAY to delete the temp file. 
+                //unlink($model->file->tempName);}
+            if($flag){
+                $transaction->commit();
                 return true;
             }
         }
-        
-       return false;
+
+        $transaction->rollback();
+        Yii::error('Problems saving the book: ' . print_r($this->getErrors(), true));
+        return false;
+    }
+
+    public function getCategoriesAsHtml(){
+        $tags = '';
+        foreach (BookHasCategory::find()->where(['book_id' => $this->book_id])->all() as $category){
+            $tags = $tags . '<span class="label label-primary text-uppercase">' . $category->cat_name . '</span>  ';
+        }
+        return $tags;
     }
 
     /**

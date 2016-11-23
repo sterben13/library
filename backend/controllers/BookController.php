@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Book;
-use backend\models\BookForm;
 use backend\models\Category;
 use backend\models\BookSearch;
 use yii\web\Controller;
@@ -65,9 +64,9 @@ class BookController extends Controller
      */
     public function actionCreate()
     {
-        $model = new BookForm();
+        $model = new Book(['scenario' => Book::SCENARIO_INSERT]);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['view', 'id' => $model->book_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -84,17 +83,12 @@ class BookController extends Controller
     public function actionUpdate($id)
     {
         Yii::info('Updating book data');
-        $model = $this->findModel($id);
-
-
-        if ($model->load(Yii::$app->request->post()) && $model->update(true, [
-                'book_isbn', 'book_title', 'book_author', 'book_abstract',
-                'book_cover', 'book_editorial'
-            ])) {
+        $model = Book::findOne($id);
+        $model->scenario = Book::SCENARIO_UPDATE;
+        $model->categories = $model->getCatNames()->all();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->book_id]);
         } else {
-            $model->categories = $model->getCatNames()->all();
-
             return $this->render('update', [
                 'model' => $model,
             ]);
