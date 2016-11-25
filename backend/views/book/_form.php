@@ -18,44 +18,24 @@ use backend\models\Category;
 
     <div class="row">
 
-    <style type="text/css">
-        input[type=file] {
-            color:transparent;
-        }
-
-    </style> 
-    <script type="text/javascript">
-        function showPreview(target, input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#preview-img').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-    </script>
-    <div class="col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-3 ">
+    <div class="img-container col-xs-6 col-xs-offset-3 col-sm-4 col-sm-offset-0 col-md-3 container-fluid">
         <figure>
-         
+        <center>
         <?= 
-            Html::img($model->isNewRecord ? Url::to('web/img/covers/generic-book-cover.jpg') :  $model->book_cover,
+            Html::img($model->isNewRecord ? Url::to('@web/img/covers/generic-book-cover.jpg') :  $model->coverUrl,
                 [
                     'id' => 'preview-img',
                     'class' => 'img-responsive',
                     'alt' => 'Portada de libro'
                 ]);
         ?>
+        </center>
         </figure>
-        <!-- <label class="btn btn-default btn-lg btn-block">UPLOAD -->
-        <?= $form->field($model, 'coverImg')->fileInput([
+        <?= $form->field($model, 'coverFile')->fileInput([
             'id' => 'image-input',
             'accept' => 'image/*',
-
-            //'required' => $model->isNewRecord ? 'true' : 'false',
-            'onchange' => 'showPreview("preview-img", this);'
+            'onchange' => 'showPreview("#preview-img", this);'
             ])->label(false) ?>
-        <!-- </label> -->
     </div>
     <br>
 
@@ -63,19 +43,19 @@ use backend\models\Category;
 
     <div class="row">   
         <div class="col-sm-6">   
-        <?= $form->field($model, 'book_isbn')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'isbn')->textInput(['maxlength' => true]) ?>
         </div>
 
         <div class="col-sm-6">   
-        <?= $form->field($model, 'book_editorial')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'editorial')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
     
-    <?= $form->field($model, 'book_title')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <div class="row">   
         <div class="col-sm-10">   
-                <?= $form->field($model, 'book_author')->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'author')->textInput(['maxlength' => true]) ?>
 
          <?= $form->field($model, 'categories')->widget(Select2::classname(), [
                 'data' => ArrayHelper::map(Category::find()->all(), 'cat_name', 'cat_name'),
@@ -98,7 +78,7 @@ use backend\models\Category;
     
     <div class="row">
     <div class="col-xs-12">
-        <?= $form->field($model, 'book_abstract')->textarea(['rows' => 6, 'cols' => 50]) ?>
+        <?= $form->field($model, 'abstract')->textarea(['rows' => 6, 'cols' => 50]) ?>
     </div>
     </div>
 

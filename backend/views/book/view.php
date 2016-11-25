@@ -29,20 +29,21 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-sm-5">
-             <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'book_isbn',
-            'book_title',
-            'book_author',
-            'book_editorial',
-            [
-                'label' => 'Portada',
-                'format'=>'raw',
-                'value' => Html::a('Archivo', $model->book_cover), 
-            ],
-        ],
-    ]) ?>
+            <h3>Resumen</h3>
+            <?= DetailView::widget([
+                'model' => $model,
+                'attributes' => [
+                    'book_isbn',
+                    'book_title',
+                    'book_author',
+                    'book_editorial',
+                    [
+                        'label' => 'Portada',
+                        'format'=>'raw',
+                        'value' => Html::a('Archivo', $model->book_cover), 
+                    ],
+                ],
+            ]) ?>
         </div>
         <div class="col-xs-12 col-sm-7">
             <h3>Resumen</h3>

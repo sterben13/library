@@ -28,21 +28,11 @@ class Book extends \yii\db\ActiveRecord
 
     private $rules = [
             [['book_isbn', 'book_title'], 'required'],
-            ['categories', 'each', 'rule' => ['string']],
             [['book_isbn'], 'string', 'max' => 13],
             [['book_title', 'book_author'], 'string', 'max' => 100],
             [[ 'book_editorial'], 'string', 'max' => 45],
             [['book_abstract'], 'string', 'max' => 500],
             [['book_cover'], 'string', 'max' => 200],
-           //[['coverImg'], 'save'],
-            [['coverImg'], 'file', 'skipOnEmpty' => true,
-                'uploadRequired' => 'No has seleccionado ningún archivo', 
-                'maxSize' => 1024*1024*8, //
-                'tooBig' => 'El tamaño máximo permitido es 1MB', 
-                'minSize' =>  10 ,
-                'extensions' => 'jpg,jpeg,png',
-                'wrongExtension' => 'El archivo {file} es una extensión no permitida {extensions}',
-            ]
         ];
 
     /**
@@ -72,43 +62,11 @@ class Book extends \yii\db\ActiveRecord
             'book_title' => 'Título',
             'book_author' => 'Autor',
             'book_abstract' => 'Resumen',
-            'coverImg' => 'Portada',
             'book_editorial' => 'Editorial',
         ];
     }
 
-    /**
-     *
-     *Override method
-     */
-     public function save($runValidation = true, $attributeNames = NULL)
-    {
-         /*array_push($this->rules, [['coverImg'], 'file', 'skipOnEmpty' => true,
-                'uploadRequired' => 'No has seleccionado ningún archivo', 
-                'maxSize' => 1024*1024*8, //
-                'tooBig' => 'El tamaño máximo permitido es 1MB', 
-                'minSize' =>  10 ,
-                'extensions' => 'jpg,jpeg,png',
-                'wrongExtension' => 'El archivo {file} es una extensión no permitida {extensions}',
-            ]);*/
-        if($this->storeCover() && parent::save($runValidation, $attributeNames)){
-            Yii::info('Book data stored');
-
-            Yii::info('Categories to store: ' . print_r($this->categories));
-            foreach ($this->categories as $category) {
-                $rel = new BookHasCategory();
-                $rel->book_id  = $this->book_id;
-                $rel->cat_name = $category;
-                if($rel->save()){
-                    Yii::info('Category ' . $rel->cat_name . ' linked to book ' . $rel->book_id);
-                }
-            }
-            return true;
-        }
-        
-        return false;
-    }
-
+  
     /**
      *
      *Override method
@@ -118,9 +76,8 @@ class Book extends \yii\db\ActiveRecord
         
         Yii::info('Cover url: ' . $this->book_cover);
         $this->storeCover();
-        if(parent::update($runValidation, $attributeNames)){
+        if(parent::save($runValidation, $attributeNames)){
             Yii::info('Book data updated');
-            return true;
             BookHasCategory::deleteAll(['book_id' => $this->book_id]);
             foreach ($this->categories as $category) {
                 $rel = new BookHasCategory();

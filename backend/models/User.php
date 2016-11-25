@@ -3,7 +3,9 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\Url;
 use yii\web\IdentityInterface;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "User".
@@ -31,6 +33,9 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const STATUS_DELETED = 0;
     const STATUS_ACTIVE = 10;
+
+    public $image;
+
     /**
      * @inheritdoc
      */
@@ -55,6 +60,14 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['user_profile_photo'], 'string', 'max' => 200],
             [['password_hash', 'password_reset_token'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
+            [['image'], 'file', 'skipOnEmpty' => true,
+                'uploadRequired' => 'No has seleccionado ningún archivo', 
+                'maxSize' => 1024*1024*8, //
+                'tooBig' => 'El tamaño máximo permitido es 1MB', 
+                'minSize' =>  10 ,
+                'extensions' => 'jpg,jpeg,png',
+                'wrongExtension' => 'El archivo {file} es una extensión no permitida {extensions}',
+            ]
         ];
     }
 
@@ -64,22 +77,72 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     public function attributeLabels()
     {
         return [
-            'user_id' => 'User ID',
-            'user_names' => 'User Names',
-            'user_lastname' => 'User Lastname',
-            'user_snd_lastname' => 'User Snd Lastname',
-            'user_curp' => 'User Curp',
-            'user_email' => 'User Email',
-            'user_telephone' => 'User Telephone',
-            'user_address' => 'User Address',
-            'user_profile_photo' => 'User Profile Photo',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
-            'password_hash' => 'Password Hash',
+            'user_id' => 'ID',
+            'user_names' => 'Nombres',
+            'user_lastname' => 'Apellido Paterno',
+            'user_snd_lastname' => 'Apellido Materno',
+            'user_curp' => 'CURP',
+            'user_email' => 'Correo electrónico',
+            'user_telephone' => 'Telefono',
+            'user_address' => 'Dirección',
+            'user_profile_photo' => 'Fotografía',
+            'created_at' => 'Fecha de creación',
+            'updated_at' => 'Última actualización',
+            'password_hash' => 'Contraseña',
             'auth_key' => 'Auth Key',
             'password_reset_token' => 'Password Reset Token',
             'status' => 'Status',
+            'image' => 'Fotografía'
         ];
+    }
+
+
+    /**
+     *
+     *Override method
+     */
+     public function save($runValidation = true, $attributeNames = NULL)
+    {
+
+        if($this->storeCover() && parent::save($runValidation, $attributeNames)){
+            Yii::info('Book data stored');
+           
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     *
+     *Override method
+     */
+     public function update($runValidation = true, $attributeNames = NULL)
+    {
+        
+        
+        $this->storeCover();
+        if(parent::update($runValidation, $attributeNames)){
+          
+          
+            return true;
+        }
+        return false;
+    }
+
+    private function storeCover(){
+        
+        $this->image = UploadedFile::getInstance($this, 'image');
+        
+        if($this->image){
+            $image = $this->image->baseName . '.' . $this->image->extension;
+            if($this->image->saveAs('img/photos/' . $image, false)){
+                $this->user_profile_photo = Url::to('@web/img/photos/' . $image);
+                return true;
+            }
+        }
+        
+       return false;
     }
 
     /**

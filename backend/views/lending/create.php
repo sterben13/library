@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Lending */
 
-$this->title = 'Create Lending';
-$this->params['breadcrumbs'][] = ['label' => 'Lendings', 'url' => ['index']];
+$this->title = 'Autorización';
+$this->params['breadcrumbs'][] = ['label' => 'Préstamos', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lending-create">
