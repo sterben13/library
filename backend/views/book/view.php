@@ -30,6 +30,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'book_title',
                     'book_author',
                     'book_editorial',
+                    // [
+                    //     'label' => 'Portada',
+                    //     'format'=>'raw',
+                    //     'value' => Html::a('Archivo', $model->book_cover), 
+                    // ],
                     [
                         'label' => 'Ejemplares',
                         'value' => Copy::find()->where(['book_id' => $model->book_id])->count() . '', 
