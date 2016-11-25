@@ -5,7 +5,7 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <img src="<?= Yii::$app->user->identity->user_profile_photo ?>" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
                 <p><?= Yii::$app->user->identity->user_names ?></p>
@@ -31,7 +31,16 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'Gestión', 'options' => ['class' => 'header']],
-                    ['label' => 'Libros', 'icon' => 'fa fa-book', 'url' => ['/book']],
+                    //['label' => 'Libros', 'icon' => 'fa fa-book', 'url' => ['/book']],
+                    [
+                        'label' => 'Librería',
+                        'icon' => 'fa fa-book',
+                        'url' => '#',
+                        'items' => [
+                            ['label' => 'Libros', 'icon' => 'mdi mdi-book', 'url' => ['/book'],],
+                            ['label' => 'Ejemplares', 'icon' => 'mdi mdi-content-copy', 'url' => ['/copy'],],
+                        ],
+                    ],
                     ['label' => 'Categorías', 'icon' => 'fa fa-tag', 'url' => ['/category']],
                     //['label' => 'Copias', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Préstamos', 'icon' => 'fa fa-clock-o', 'url' => ['/lending']],

@@ -111,6 +111,17 @@ class LendingController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionReturn($copy, $user)
+    {
+        $lend = Lending::findOne(['copy_id' => $copy, 'user_id' => $user]);
+
+        if(!$lend->lend_return_real){
+            $lend->lend_return_real = date_format(date_create(), 'Y-m-d H:m:s');
+            $lend->save();
+        }
+        print_r($lend->lend_return_at . ' ' . $user);
+    }
+
     /**
      * Finds the Lending model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.

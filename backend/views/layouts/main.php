@@ -18,6 +18,7 @@ if (Yii::$app->controller->action->id === 'login') {
 
     if (class_exists('backend\assets\AppAsset')) {
         backend\assets\AppAsset::register($this);
+        backend\assets\MaterialAsset::register($this);
     } else {
         app\assets\AppAsset::register($this);
     }
