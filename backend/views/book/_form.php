@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\helpers\ArrayHelper;
-use yii\helpers\URL;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use backend\models\Category;
@@ -23,7 +23,7 @@ use backend\models\Category;
     <div class="col-sm-3">
         <figure class="form-group img-container">
         <?= 
-            Html::img($model->isNewRecord ? Url::to('@web/img/covers/generic-book-cover_e.jpg') :  $model->book_cover,
+            Html::img($model->isNewRecord ? Url::to('@web/img/covers/generic-book-cover.jpg') :  $model->book_cover,
                 [
                     'id' => 'preview-img',
                     'alt' => 'Portada de libro'

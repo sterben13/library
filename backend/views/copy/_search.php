@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'copy_available') ?>
 
-    <?php // echo $form->field($model, 'copy_state') ?>
+    <?php echo $form->field($model, 'copy_state') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

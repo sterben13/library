@@ -7,7 +7,7 @@ use Yii;
 /**
  * This is the model class for table "Copy".
  *
- * @property integer $copy_id
+ * @property string $copy_id
  * @property integer $book_id
  * @property string $copy_edition
  * @property string $copy_language
@@ -34,9 +34,13 @@ class Copy extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['copy_id', 'book_id', 'copy_edition'], 'required'],
-            [['book_id', 'copy_available'], 'integer'],
-            ['copy_id', 'string'],
+            [['copy_id', 'copy_available'], 'required'],
+            ['book_id', 'required', 'message' => 'Ingrese el titulo del Ejemplar.'],
+            ['copy_edition', 'required', 'message' => 'Ingrese la edición del Ejemplar.'],
+            ['copy_language', 'required', 'message' => 'Ingrese el Idioma del Ejemplar.'],
+            ['copy_state', 'required', 'message' => 'Ingrese las condiciones del Ejemplar.'],
+            ['copy_available', 'integer'],
+            [['copy_id', 'book_id'], 'safe'],
             [['copy_edition', 'copy_language', 'copy_state'], 'string'],
             [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_id' => 'book_id']],
         ];
@@ -48,12 +52,12 @@ class Copy extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'copy_id' => 'Copy ID',
-            'book_id' => 'Book ID',
-            'copy_edition' => 'Copy Edition',
-            'copy_language' => 'Copy Language',
-            'copy_available' => 'Copy Available',
-            'copy_state' => 'Copy State',
+            'copy_id' => 'ID',
+            'book_id' => 'Titulo',
+            'copy_edition' => 'Edición del ejemplar',
+            'copy_language' => 'Lenguaje del ejemplar',
+            'copy_available' => 'Disponibilidad',
+            'copy_state' => 'Condición',
         ];
     }
 
