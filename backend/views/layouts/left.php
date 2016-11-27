@@ -42,7 +42,7 @@
                         ],
                     ],
                     ['label' => 'Categorías', 'icon' => 'fa fa-tag', 'url' => ['/category']],
-                    //['label' => 'Copias', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
+                    ['label' => 'Copias', 'icon' => 'fa fa-file-code-o', 'url' => ['/copy']],
                     ['label' => 'Préstamos', 'icon' => 'fa fa-clock-o', 'url' => ['/lending']],
                     ['label' => 'Usuarios', 'icon' => 'fa fa-user-circle-o', 'url' => ['/user']],
 

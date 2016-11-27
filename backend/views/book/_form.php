@@ -27,7 +27,7 @@ use backend\models\Category;
                 [
                     'id' => 'preview-img',
                     'alt' => 'Portada de libro'
-                ]);
+                ]);*/
         ?>
         </figure>
 

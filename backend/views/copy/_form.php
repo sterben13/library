@@ -10,7 +10,10 @@ use yii\helpers\ArrayHelper;
 
 <div class="copy-form container-fluid" style="background: white">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin();
+    $select= ArrayHelper::map(Book::find()->all(),
+                'book_id', 'book_title'
+            ); ?>
 
     <?php //echo $form->field($model, 'copy_id')->textInput() ?>
 
