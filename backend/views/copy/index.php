@@ -22,6 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+        'rowOptions'=>function ($model){
+            if($model->copy_state=='Ok'){
+                return ['style'=>'background:#90CAF9'];
+            }else if($model->copy_state=='Damaged'){
+                return ['style'=>'background:#D50000; color:white'];
+            }else{
+                return ['style'=>'background:#F57C00'];
+            }
+        },
         'columns' => [
             [
                 'class' => 'yii\grid\SerialColumn'
@@ -42,18 +51,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                 },
             ],
-                        'copy_edition',
-            [
-                'attribute'=>'copy_available',
-                'value'=> function ($data){
-                    if($data->copy_available == 0){
-                        return "Disponible";
-                    }else{
-                        return "Ocupado";
-                    }
-                }
-            ],
+            
+            'copy_edition',
                         
+            'copy_available',
+                                    
             'copy_language',
             
             'copy_state',

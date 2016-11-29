@@ -55,7 +55,7 @@ class CopySearch extends Copy {
         $query->joinWith('book');
         // grid filtering conditions
         $query->andFilterWhere([
-            'copy_available' => $this->copy_available,
+            
         ]);
 
         $query->andFilterWhere(['like', 'copy_edition', $this->copy_edition])
@@ -63,7 +63,7 @@ class CopySearch extends Copy {
                 ->andFilterWhere(['like', 'copy_state', $this->copy_state])
                 ->andFilterWhere(['like', 'book_title', $this->book_id,])
                 ->andFilterWhere(['like', 'copy_id', $this->copy_id,])
-                ->andFilterWhere(['like', 'copy_available', $this->copy_available=='Disponible',]);
+                ->andFilterWhere(['like', 'copy_available', $this->copy_available]);
 
 
         return $dataProvider;

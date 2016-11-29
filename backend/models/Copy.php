@@ -11,7 +11,7 @@ use Yii;
  * @property integer $book_id
  * @property string $copy_edition
  * @property string $copy_language
- * @property integer $copy_available
+ * @property string $copy_available
  * @property string $copy_state
  *
  * @property Book $book
@@ -39,9 +39,8 @@ class Copy extends \yii\db\ActiveRecord
             ['copy_edition', 'required', 'message' => 'Ingrese la edición del Ejemplar.'],
             ['copy_language', 'required', 'message' => 'Ingrese el Idioma del Ejemplar.'],
             ['copy_state', 'required', 'message' => 'Ingrese las condiciones del Ejemplar.'],
-            ['copy_available', 'integer'],
             [['copy_id', 'book_id'], 'safe'],
-            [['copy_edition', 'copy_language', 'copy_state'], 'string'],
+            [['copy_edition', 'copy_language', 'copy_state', 'copy_available'], 'string'],
             [['book_id'], 'exist', 'skipOnError' => true, 'targetClass' => Book::className(), 'targetAttribute' => ['book_id' => 'book_id']],
         ];
     }
