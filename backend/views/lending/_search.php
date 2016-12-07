@@ -16,18 +16,10 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <?= $form->field($model, 'user_id') ?>
-
-    <?= $form->field($model, 'copy_id') ?>
-
-    <?= $form->field($model, 'lend_auth_at') ?>
-
-    <?= $form->field($model, 'lend_return_at') ?>
-
-    <?= $form->field($model, 'lend_return_real') ?>
+ 
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
