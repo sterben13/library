@@ -68,9 +68,8 @@ class CopyController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $book = Book::find()->where(['book_id'=>$model->book_id])->one();
-            $id = $book->book_isbn."/". substr(uniqid(), 0, 3);
+            $id = $book->book_isbn."/". substr(uniqid(), -3);
             $model->copy_id = $id;
-            $model->copy_available=0;
             $model->save();
             return $this->redirect(['view', 'id' => $model->copy_id]);
         } else {

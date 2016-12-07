@@ -18,8 +18,7 @@ class LendingSearch extends Lending
     public function rules()
     {
         return [
-            [['user_id', 'copy_id'], 'integer'],
-            [['lend_auth_at', 'lend_return_at', 'lend_return_real'], 'safe'],
+            [['user_id', 'copy_id','lend_auth_at', 'lend_return_at', 'lend_return_real'], 'safe'],
         ];
     }
 
@@ -58,14 +57,18 @@ class LendingSearch extends Lending
         }
 
         // grid filtering conditions
+        $query->joinWith('user');
+        $query->joinWith('copy');
         $query->andFilterWhere([
-            'user_id' => $this->user_id,
-            'copy_id' => $this->copy_id,
+            //'user_id' => $this->user_id,
+            
             'lend_auth_at' => $this->lend_auth_at,
             'lend_return_at' => $this->lend_return_at,
             'lend_return_real' => $this->lend_return_real,
         ]);
-
+        $query->orFilterWhere(['like', 'user_names', $this->user_id,])
+        ->orFilterWhere(['like', 'user_lastname', $this->user_id,])
+        ->orFilterWhere(['like', 'user_snd_lastname', $this->user_id,]);
         return $dataProvider;
     }
 }

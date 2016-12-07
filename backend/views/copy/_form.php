@@ -30,7 +30,7 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'copy_language')->dropDownList([ 'Spanish' => 'Spanish', 'English' => 'English', 'Chinese' => 'Chinese', 'Russian' => 'Russian', 'Arabic' => 'Arabic', 'Portuguese' => 'Portuguese', 'French' => 'French', 'Japanese' => 'Japanese', 'Turkish' => 'Turkish', 'German' => 'German', ], ['prompt' => 'Seleccione un lenguaje']) ?>
 
-    <?php // $form->field($model, 'copy_available')->textInput() ?>
+    <?= $form->field($model, 'copy_available')->dropDownList([ 'Disponible' => 'Disponible', 'Ocupado' => 'Ocupado'], ['prompt' => 'Selecione la disponibilidad']) ?>
 
     <?= $form->field($model, 'copy_state')->dropDownList([ 'Ok' => 'Ok', 'Damaged' => 'Damaged', 'Incomplete' => 'Incomplete', ], ['prompt' => 'Estado del Ejemplar']) ?>
 
