@@ -41,8 +41,8 @@ class Category extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'cat_name' => 'Cat Name',
-            'cat_descrption' => 'Cat Descrption',
+            'cat_name' => 'Categoría',
+            'cat_descrption' => 'Descripción',
         ];
     }
 

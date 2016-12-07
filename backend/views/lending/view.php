@@ -20,9 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('ACTUALIZAR', ['update', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id], ['class' => 'btn btn-primary']) ?>
         <?=
-        Html::a('Delete', ['delete', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id], [
+        Html::a('ELIMINAR', ['delete', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',

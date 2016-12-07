@@ -64,8 +64,6 @@ class CopySearch extends Copy {
                 ->andFilterWhere(['like', 'book_title', $this->book_id,])
                 ->andFilterWhere(['like', 'copy_id', $this->copy_id,])
                 ->andFilterWhere(['like', 'copy_available', $this->copy_available]);
-
-
         return $dataProvider;
     }
 
