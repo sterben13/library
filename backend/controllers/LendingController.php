@@ -67,8 +67,11 @@ class LendingController extends Controller
         $model = new Lending();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->lend_return_real=date("Y-m-d");
+            $model->lend_auth_at=date('Y-m-d');
             $model->save();
+            $copy = \backend\models\Copy::find()->where(['copy_id'=>$model->copy_id])->one();
+            $copy->copy_available = "Ocupado";
+            $copy->update();
             return $this->redirect(['view', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id]);
         } else {
             return $this->render('create', [
