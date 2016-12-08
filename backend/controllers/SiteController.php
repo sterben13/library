@@ -60,7 +60,8 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $url = \yii\helpers\Url::to(['/book/index']);
+        header("Location: http://localhost$url");
     }
 
     /**

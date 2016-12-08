@@ -27,41 +27,29 @@ use yii\helpers\Html;
                         <span class="hidden-xs"><?= Yii::$app->user->identity->user_names?></span>
                     </a>
                     <ul class="dropdown-menu">
-                        <!-- User image -->
                         <li class="user-header">
                             <img src="<?= Yii::$app->user->identity->user_profile_photo ?>" class="img-circle"
                                  alt="User Image"/>
-
                             <p>
                             <?php 
                                 $username = Yii::$app->user->identity->user_names;
+                                $id= Yii::$app->user->identity->id;
                                 $epoch = Yii::$app->user->identity->created_at;
                                 $dt = new DateTime("@$epoch");
                                 $creation_date = $dt->format('d-m-Y');
                             ?> 
 
-                            <?= $username?> - Web Developer
+                            <?= $username?>
                                 <small>Member since <?= $creation_date ?></small>
                             </p>
                         </li>
-                        <!-- Menu Body -->
-                        <!--
-                        <li class="user-body">
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Sales</a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#">Friends</a>
-                            </div>
-                        </li>
-                        -->
-                        <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                <?= Html::a(
+                                    'Profile',
+                                    ['/user/view', 'id'=>$id],
+                                    ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
+                                ) ?>
                             </div>
                             <div class="pull-right">
                                 <?= Html::a(
@@ -72,11 +60,6 @@ use yii\helpers\Html;
                             </div>
                         </li>
                     </ul>
-                </li>
-
-                <!-- User Account: style can be found in dropdown.less -->
-                <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
             </ul>
         </div>

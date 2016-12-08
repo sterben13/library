@@ -42,7 +42,7 @@ use backend\models\Category;
     <legend>Datos del Libro</legend>
     <div class="row">   
         <div class="col-sm-6">   
-        <?= $form->field($model, 'book_isbn')->textInput(['maxlength' => true, 'pattern' => '[0-9]{13}', 'required' => true]) ?>
+        <?= $form->field($model, 'book_isbn')->textInput(['maxlength' => true, 'pattern' => '[0-9]{11}', 'required' => true]) ?>
         </div>
 
         <div class="col-sm-6">   
