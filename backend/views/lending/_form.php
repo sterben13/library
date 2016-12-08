@@ -80,33 +80,7 @@ function dataCopy() {
             'format' => 'yyyy-m-d',
         ]
     ]);
-    ?>
-    <?php
-    ?>
-    <?=
-        $form->field($model, 'lend_auth_at')->widget(
-                DatePicker::className(), [
-                    'type' => DatePicker::TYPE_INPUT,
-                    'options' => ['value' => date('Y-m-d'),  'disabled' => true],
-                    'pluginOptions' => [
-                        'autoclose' => true,
-                        'format' => 'dd-M-yyyy',
-                    ]
-                ]
-        );
-    ?>
-
-    <?=
-    $form->field($model, 'lend_return_real')->widget(
-            DatePicker::className(), [
-        'type' => DatePicker::TYPE_INPUT,
-        'options' => ['value' => date('Y-m-d', strtotime('+5 days'))],
-        'pluginOptions' => [
-            'autoclose' => true,
-            'format' => 'yyyy-m-d',
-        ]
-    ]);
-    ?>
+    ?>  
 
     <?=
         $form->field($model, 'lend_return_real')->widget(
