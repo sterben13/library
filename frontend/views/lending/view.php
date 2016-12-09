@@ -2,41 +2,29 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
-use backend\models\User;
-use backend\models\Copy;
+use frontend\models\User;
 use backend\models\Book;
-
+use backend\models\Copy;
 /* @var $this yii\web\View */
-/* @var $model backend\models\Lending */
+/* @var $model frontend\models\Lending */
 
-$this->title = $model->user_id;
-$this->params['breadcrumbs'][] = ['label' => 'Préstamo', 'url' => ['index']];
+$this->title = $model->lending_id;
+$this->params['breadcrumbs'][] = ['label' => 'Lendings', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="lending-view">
 
-    <h1><?php
-        // Html::encode($this->title);
-        ?></h1>
+    
 
     <p>
-        <?= Html::a('ACTUALIZAR', ['update', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id], ['class' => 'btn btn-primary']) ?>
-        <?=
-        Html::a('ELIMINAR', ['delete', 'user_id' => $model->user_id, 'copy_id' => $model->copy_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ])
-        ?>
+        
+        
     </p>
 
-    <?=
-    DetailView::widget([
+    <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-                [
+[
                 'attribute' => 'user_id',
                 'value' => user($model->user_id)
             ],
@@ -84,3 +72,4 @@ function dateFormatter($date) {
     return yii\bootstrap\Html::encode(Yii::$app->formatter->asDate($date));
 }
 ?>
+
