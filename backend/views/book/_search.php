@@ -25,9 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'book_abstract') ?>
 
-    <?php // echo $form->field($model, 'book_cover') ?>
 
-    <?php // echo $form->field($model, 'book_editorial') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
