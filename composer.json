@@ -21,8 +21,9 @@
         "dmstr/yii2-adminlte-asset": "2.*",
         "kartik-v/yii2-widgets": "*",
         "kartik-v/yii2-widget-datepicker": "@dev",
-        "mervick/material-design-icons": "^2.2"
-        "kartik-v/yii2-widget-select2": "^2.0"
+        "mervick/material-design-icons": "^2.2",
+        "kartik-v/yii2-widget-select2": "^2.0",
+        "philippfrenzel/yii2fullcalendar": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
