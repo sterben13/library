@@ -1,11 +1,14 @@
 <?php
 
-namespace backend\controllers;
+namespace app\modules\user\controllers;
 
 use Yii;
 
-use backend\models\Category;
-use backend\models\CategorySearch;
+use backend\models\User;
+use backend\models\UserSearch;
+
+
+use common\models\AuthItem;
 
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -13,12 +16,11 @@ USE yii\web\ForbiddenHttpException;
 
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\AuthItem;
 
 /**
- * CategoryController implements the CRUD actions for Category model.
+ * UserController implements the CRUD actions for User model.
  */
-class CategoryController extends Controller
+class AdminController extends Controller
 {
     /**
      * @inheritdoc
@@ -34,7 +36,7 @@ class CategoryController extends Controller
             ],
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'index', 'delete', 'view','logout',],
+                'only' => ['create', 'update', 'index', 'delete', 'view','logout', 'reactivate'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -46,16 +48,19 @@ class CategoryController extends Controller
     }
 
     /**
-     * Lists all Category models.
+     * Lists all User models.
      * @return mixed
      */
     public function actionIndex()
     {
-        if(!Yii::$app->user->can(AuthItem::READ_CATEGORY)){
+        if(!Yii::$app->user->can(AuthItem::READ_ADMIN)){
             throw new ForbiddenHttpException();
         } 
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new UserSearch();
+        $params = Yii::$app->request->queryParams;
+        $params['UserSearch']['user_rol'] = 'admin';
+
+        $dataProvider = $searchModel->search($params);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -64,13 +69,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * Displays a single Category model.
-     * @param string $id
+     * Displays a single User model.
+     * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        if(!Yii::$app->user->can(AuthItem::READ_CATEGORY)){
+        if(!Yii::$app->user->can(AuthItem::READ_ADMIN)){
             throw new ForbiddenHttpException();
         } 
         return $this->render('view', [
@@ -79,74 +84,86 @@ class CategoryController extends Controller
     }
 
     /**
-     * Creates a new Category model.
+     * Creates a new User model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        if(!Yii::$app->user->can(AuthItem::CREATE_CATEGORY)){
+        if(!Yii::$app->user->can(AuthItem::CREATE_ADMIN)){
             throw new ForbiddenHttpException();
         } 
-        $model = new Category();
-
+        $model = new User();
+        $model->user_rol = 'admin';
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->cat_name]);
+            return $this->redirect(['view', 'id' => $model->user_id]);
         } else {
-            return $this->render('create', [
+            return $this->render('../../../../views/user/create', [
                 'model' => $model,
             ]);
         }
     }
 
     /**
-     * Updates an existing Category model.
+     * Updates an existing User model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionUpdate($id)
     {
-        if(!Yii::$app->user->can(AuthItem::UPDATE_CATEGORY)){
+        if(!Yii::$app->user->can(AuthItem::UPDATE_ADMIN)){
             throw new ForbiddenHttpException();
-        }
+        } 
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->update()) {
-            return $this->redirect(['view', 'id' => $model->cat_name]);
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->user_id]);
         } else {
-            return $this->render('update', [
+            return $this->render('../../../../views/user/update', [
                 'model' => $model,
             ]);
         }
     }
 
     /**
-     * Deletes an existing Category model.
+     * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param string $id
+     * @param integer $id
      * @return mixed
      */
     public function actionDelete($id)
     {
-        if(!Yii::$app->user->can(AuthItem::DELETE_CATEGORY)){
+        if(!Yii::$app->user->can(AuthItem::DISABLE_ADMIN)){
             throw new ForbiddenHttpException();
-        }
-        $this->findModel($id)->delete();
+        } 
+        $model = $this->findModel($id);
+        $model->status = User::STATUS_DELETED;
+        $model->save();
+        return $this->redirect(['view', 'id' => $id]);
+    }
 
-        return $this->redirect(['index']);
+    public function actionReactivate($id)
+    {
+        if(!Yii::$app->user->can(AuthItem::ENABLE_ADMIN)){
+            throw new ForbiddenHttpException();
+        } 
+        $model = $this->findModel($id);
+        $model->status = User::STATUS_ACTIVE;
+        $model->save();
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**
-     * Finds the Category model based on its primary key value.
+     * Finds the User model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param string $id
-     * @return Category the loaded model
+     * @param integer $id
+     * @return User the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Category::findOne($id)) !== null) {
+        if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

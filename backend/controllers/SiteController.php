@@ -35,7 +35,7 @@ class SiteController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'logout' => ['post'],
+                    'logout' => ['get'],
                 ],
             ],
         ];
@@ -60,7 +60,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        return $this->redirect(['book/index']);
     }
 
     /**
@@ -76,7 +76,10 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            if(!Yii::$app->user->can('admin') && !Yii::$app->user->can('librarian') && !Yii::$app->user->can('super-user'))
+                Yii::$app->user->logout();
             return $this->goBack();
+
         } else {
             return $this->render('login', [
                 'model' => $model,

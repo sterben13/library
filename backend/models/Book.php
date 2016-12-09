@@ -33,7 +33,7 @@ class Book extends \yii\db\ActiveRecord
 
     private $rules = [
             [['book_isbn', 'book_title', 'categories'], 'required'],
-            [['book_isbn'], 'string', 'max' => 13],
+            [['book_isbn'], 'string', 'max' => 11],
             [['book_title', 'book_author'], 'string', 'max' => 100],
             [['book_editorial'], 'string', 'max' => 45],
             [['book_abstract'], 'string', 'max' => 500],
@@ -105,7 +105,12 @@ class Book extends \yii\db\ActiveRecord
         $file = UploadedFile::getInstance($this, 'coverFile');
         $fileName = $this->book_isbn;
         $fileHelper = new FileHelper('img/covers/');
-        $this->book_cover = $fileHelper->upload($file, $fileName, 'img/covers/generic-book-cover.jpg');
+        if($cover_url = $fileHelper->upload($file, $fileName)){
+            $this->book_cover = $cover_url;
+        } else {
+            if($this->isNewRecord) 
+               $this->book_cover = '/library/backend/web/img/covers/generic-book-cover.jpg';
+        }
 
         $transaction = Book::getDb()->beginTransaction();
         if(parent::save()){

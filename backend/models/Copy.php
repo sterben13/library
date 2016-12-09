@@ -20,6 +20,13 @@ use Yii;
  */
 class Copy extends \yii\db\ActiveRecord
 {
+
+    const AVAILABLE = 'Disponible';
+    const UNAVAILABLE = 'Ocupado';
+
+    const STATE_OK = 'Ok';
+    const STATE_DAMAGED = 'Damaged';
+    const STATE_INCOMPLETE = 'Incomplete';
     /**
      * @inheritdoc
      */
@@ -34,7 +41,7 @@ class Copy extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['copy_id', 'copy_available'], 'required'],
+            [['copy_id'], 'required'],
             ['book_id', 'required', 'message' => 'Ingrese el titulo del Ejemplar.'],
             ['copy_edition', 'required', 'message' => 'Ingrese la edición del Ejemplar.'],
             ['copy_language', 'required', 'message' => 'Ingrese el Idioma del Ejemplar.'],
@@ -52,9 +59,9 @@ class Copy extends \yii\db\ActiveRecord
     {
         return [
             'copy_id' => 'ID',
-            'book_id' => 'Titulo',
-            'copy_edition' => 'Edición del ejemplar',
-            'copy_language' => 'Lenguaje del ejemplar',
+            'book_id' => 'Libro',
+            'copy_edition' => 'Edición',
+            'copy_language' => 'Idioma',
             'copy_available' => 'Disponibilidad',
             'copy_state' => 'Condición',
         ];

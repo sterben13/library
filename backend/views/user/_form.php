@@ -66,7 +66,8 @@ use yii\widgets\ActiveForm;
     </fieldset>
     <fieldset>
         <legend>Datos de Contacto</legend>
-        <div class="row">
+        <?php if($model->isNewRecord): ?>
+              <div class="row">
             <div class="col-sm-8">
                 <?= $form->field($model, 'user_email')->textInput(['maxlength' => true]) ?>
             </div>
@@ -74,7 +75,18 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($model, 'user_telephone')->textInput(['maxlength' => true]) ?>
             </div>
         </div>
-        <?= $form->field($model, 'user_address')->textInput(['maxlength' => true]) ?>
+       
+        <?php else: ?>
+        <div class="row">
+            <div class="col-sm-8">
+                <?= $form->field($model, 'user_address')->textInput(['maxlength' => true]) ?>
+            </div>
+            <div class="col-sm-4">
+                <?= $form->field($model, 'user_telephone')->textInput(['maxlength' => true]) ?>
+            </div>
+        </div>
+    <?php endif ?>
+
     </fieldset>   
     
 
@@ -91,7 +103,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'status')->textInput() ?> -->
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+        <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

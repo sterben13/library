@@ -16,9 +16,9 @@ class FileHelper
 		Yii::info('Constructor inicializated: ' . $this->destination);
 	}
 
-	public function upload($file, $name, $default){
+	public function upload($file, $name){
 
-		if(!$file) return Url::to('@web/' . $this->destination . $default);
+		if(!$file) return null;
 
 		Yii::info('Storing file on path: ' . $this->destination);
 		$filePath = $this->destination . $name . '.' .$file->extension;
@@ -27,7 +27,7 @@ class FileHelper
             return Url::to('@web/' . $filePath);
         } else {
             Yii::info('File NOT stored');
-            return Url::to('@web/' . $this->destination . $default);
+            return null;
         }
 	}
 }

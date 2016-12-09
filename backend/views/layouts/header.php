@@ -67,17 +67,14 @@ use yii\helpers\Html;
                                 <?= Html::a(
                                     'Sign out',
                                     ['/site/logout'],
-                                    ['data-method' => 'post', 'class' => 'btn btn-default btn-flat']
+                                    ['class' => 'btn btn-default btn-flat']
                                 ) ?>
                             </div>
                         </li>
                     </ul>
                 </li>
 
-                <!-- User Account: style can be found in dropdown.less -->
-                <li>
-                    <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
-                </li>
+               
             </ul>
         </div>
     </nav>

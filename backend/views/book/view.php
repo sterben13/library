@@ -37,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     // ],
                     [
                         'label' => 'Ejemplares',
-                        'value' => Copy::find()->where(['book_id' => $model->book_id])->count() . '', 
+                        'value' => $model->getCopies()->count()
+                        
                     ],
                      [
                         'label' => 'Categorías',

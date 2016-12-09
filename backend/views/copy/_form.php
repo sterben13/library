@@ -4,11 +4,12 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\widgets\Select2;
 use backend\models\Book;
+use backend\models\Copy;
 use yii\helpers\ArrayHelper;
 
 ?>
 
-<div class="copy-form container-fluid" style="background: white">
+<div class="copy-form">
 
     <?php $form = ActiveForm::begin();
     $select= ArrayHelper::map(Book::find()->all(),
@@ -26,13 +27,66 @@ use yii\helpers\ArrayHelper;
         ]);
     ?>
 
-    <?= $form->field($model, 'copy_edition')->dropDownList([ 'First' => 'First', 'Second' => 'Second', 'Third' => 'Third', 'Fourth' => 'Fourth', 'Fifth' => 'Fifth', ], ['prompt' => 'Seleccione una Edición']) ?>
+    <div class="row">
+        <div class="col-xs-6">
+    <?= $form
+        ->field($model, 'copy_edition')
+        ->dropDownList([ 
+            'First' => 'Primera', 
+            'Second' => 'Segunda', 
+            'Third' => 'Tercera', 
+            'Fourth' => 'Cuarta', 
+            'Fifth' => 'Quinta', 
+        ], 
+        ['prompt' => 'Seleccione una Edición']) ?>
+        </div>
+        <div class="col-xs-6">
+    
+     <?= $form
+        ->field($model, 'copy_language')
+        ->dropDownList([ 
+            'Spanish' => 'Español', 
+            'English' => 'Inglés', 
+            'Chinese' => 'Chino', 
+            'Russian' => 'Ruso', 
+            'Arabic' => 'Arábigo', 
+            'Portuguese' => 'Portugués', 
+            'French' => 'Francés', 
+            'Japanese' => 'Japonés', 
+            'Turkish' => 'Turco', 
+            'German' => 'Alemán', 
+        ], ['prompt' => 'Seleccione un idioma']) ?>
 
-    <?= $form->field($model, 'copy_language')->dropDownList([ 'Spanish' => 'Spanish', 'English' => 'English', 'Chinese' => 'Chinese', 'Russian' => 'Russian', 'Arabic' => 'Arabic', 'Portuguese' => 'Portuguese', 'French' => 'French', 'Japanese' => 'Japanese', 'Turkish' => 'Turkish', 'German' => 'German', ], ['prompt' => 'Seleccione un lenguaje']) ?>
+        </div>
+    </div>
 
-    <?= $form->field($model, 'copy_available')->dropDownList([ 'Disponible' => 'Disponible', 'Ocupado' => 'Ocupado'], ['prompt' => 'Selecione la disponibilidad']) ?>
 
-    <?= $form->field($model, 'copy_state')->dropDownList([ 'Ok' => 'Ok', 'Damaged' => 'Damaged', 'Incomplete' => 'Incomplete', ], ['prompt' => 'Estado del Ejemplar']) ?>
+    <div class="row">
+        <div class="col-xs-6">
+    <?php
+    if($model->isNewRecord)
+        $model->copy_available = Copy::AVAILABLE;
+    echo $form
+        ->field($model, 'copy_available')
+        ->dropDownList([ 
+            Copy::AVAILABLE     => 'Disponible', 
+            Copy::UNAVAILABLE   => 'Ocupado'
+        ], ['prompt' => 'Selecione la disponibilidad', 'disabled' => $model->isNewRecord]) ?>
+        </div>
+        <div class="col-xs-6">
+    
+    <?= $form
+        ->field($model, 'copy_state')
+        ->dropDownList([ 
+            Copy::STATE_OK => 'Ok', 
+            Copy::STATE_DAMAGED => 'Dañado', 
+            Copy::STATE_INCOMPLETE => 'Incompleto', 
+        ], ['prompt' => 'Estado del Ejemplar']) ?>
+        </div>
+    </div>
+
+    
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Registrar' : 'Actualizar', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

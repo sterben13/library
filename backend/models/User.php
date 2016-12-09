@@ -112,15 +112,42 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         $file = UploadedFile::getInstance($this, 'image');
         $fileName = $this->user_curp;
         $fileHelper = new FileHelper('img/photos/');
-        $this->user_profile_photo = $fileHelper->upload($file, $fileName, 'user-default.png');
+
+        if($photo_url = $fileHelper->upload($file, $fileName)){
+            $this->user_profile_photo = $photo_url;
+        } else {
+            if($this->isNewRecord) 
+               $this->user_profile_photo = '/library/backend/web/img/photos/user-default.png';
+        }
 
         $this->created_at = date('U');
-        $this->status = self::STATUS_ACTIVE;
-        if($this->isNewRecord)
+
+        if($this->isNewRecord){
             $this->setPassword($this->password_hash);
+            $this->status = self::STATUS_ACTIVE;
+        }
 
+        $transaction = self::getDb()->beginTransaction();
+        $new_record = $this->isNewRecord;
+        if(parent::save($runValidation, $attributeNames)){
 
-        return parent::save($runValidation, $attributeNames);
+            if($new_record) {
+                $auth_assigment = new AuthAssignment;
+                $auth_assigment->item_name = $this->user_rol;
+                $auth_assigment->user_id = $this->user_id;
+                if(!$auth_assigment->save()){
+                    $transaction->rollback();
+                    return false;
+                }
+            }
+
+        } else {
+            $transaction->rollback();
+            return false;
+        }
+
+        $transaction->commit();
+        return true;
     }
 
 

@@ -11,10 +11,7 @@ use backend\models\Category;
 /* @var $model backend\models\Book */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<style type="text/css">
-    
-</style>
-<div class="book-form container-fluid">
+<div class="book-form">
 
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->errorSummary($model); ?>
@@ -42,7 +39,7 @@ use backend\models\Category;
     <legend>Datos del Libro</legend>
     <div class="row">   
         <div class="col-sm-6">   
-        <?= $form->field($model, 'book_isbn')->textInput(['maxlength' => true, 'pattern' => '[0-9]{13}', 'required' => true]) ?>
+        <?= $form->field($model, 'book_isbn')->textInput(['maxlength' => true, 'pattern' => '[0-9]{11}', 'required' => true]) ?>
         </div>
 
         <div class="col-sm-6">   
@@ -91,4 +88,5 @@ use backend\models\Category;
 
     <?php ActiveForm::end(); ?>
 
+</div>
 </div>
