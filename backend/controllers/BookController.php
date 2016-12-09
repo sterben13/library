@@ -6,8 +6,13 @@ use Yii;
 use backend\models\Book;
 use backend\models\Category;
 use backend\models\BookSearch;
+
+use common\models\AuthItem;
+
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+USE yii\web\ForbiddenHttpException;
+
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 
@@ -47,6 +52,9 @@ class BookController extends Controller
      */
     public function actionIndex()
     {
+        if(!Yii::$app->user->can(AuthItem::READ_BOOK)){
+            throw new ForbiddenHttpException();
+        } 
         $searchModel = new BookSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -63,6 +71,9 @@ class BookController extends Controller
      */
     public function actionView($id)
     {
+        if(!Yii::$app->user->can(AuthItem::READ_BOOK)){
+            throw new ForbiddenHttpException();
+        } 
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
@@ -75,6 +86,9 @@ class BookController extends Controller
      */
     public function actionCreate()
     {
+        if(!Yii::$app->user->can(AuthItem::CREATE_BOOK)){
+            throw new ForbiddenHttpException();
+        } 
         $model = new Book(['scenario' => Book::SCENARIO_INSERT]);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->book_id]);
@@ -93,6 +107,9 @@ class BookController extends Controller
      */
     public function actionUpdate($id)
     {
+        if(!Yii::$app->user->can(AuthItem::UPDATE_BOOK)){
+            throw new ForbiddenHttpException();
+        } 
         Yii::info('Updating book data');
         $model = Book::findOne($id);
         $model->scenario = Book::SCENARIO_UPDATE;

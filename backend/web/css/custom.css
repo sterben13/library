@@ -11,8 +11,8 @@ legend {
 	padding-top: 10px;
 }
 
-.book-form,
-.user-form {
+
+[class$='form'] {
     background-color: #FFFFFF;
     padding: 20px;
 }
@@ -66,4 +66,26 @@ img {
 	padding: 30px;
 }
 
+}
+
+.login-page {
+	background-color: #e6ac00;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-content: center;
+    align-content: center;
+
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
+.login-box {
+	height: 300px;
+}
+
+.login-box
+a {
+	color: white;
 }

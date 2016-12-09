@@ -15,13 +15,16 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'user_id') ?>
- 
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+    <div class="row">
+    	<div class="col-xs-8">
+    		<?= $form->field($model, 'user_id')->textInput(['placeholder' => 'Búsqueda...'])->label(false) ?>
+    	</div>
+    	<div class="col-xs-2">
+    		<div class="form-group">
+		        <?= Html::submitButton('<span class="fa fa-search"></span> Search', ['class' => 'btn btn-primary']) ?>
+		    </div>
+    	</div>
     </div>
-
     <?php ActiveForm::end(); ?>
 
 </div>

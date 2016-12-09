@@ -81,8 +81,13 @@ class CopyController extends Controller
             $book = Book::find()->where(['book_id'=>$model->book_id])->one();
             $id = $book->book_isbn."/". substr(uniqid(), -3);
             $model->copy_id = $id;
-            $model->save();
+            if($model->save()) {
             return $this->redirect(['view', 'id' => $model->copy_id]);
+            } else {
+                return $this->render('create', [
+                'model' => $model,
+            ]);
+            } 
         } else {
             return $this->render('create', [
                 'model' => $model,

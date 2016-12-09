@@ -11,10 +11,7 @@ use backend\models\Category;
 /* @var $model backend\models\Book */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<style type="text/css">
-    
-</style>
-<div class="book-form container-fluid">
+<div class="book-form">
 
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->errorSummary($model); ?>
@@ -91,4 +88,5 @@ use backend\models\Category;
 
     <?php ActiveForm::end(); ?>
 
+</div>
 </div>
